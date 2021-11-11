@@ -1,0 +1,48 @@
+1. Заведи отдельную папку для установки кубера. 
+В моем случае это: С:\Tools\k8s\
+
+2. Надо установить kubectl:
+	https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-kubectl-binary-with-curl-on-windows
+	и нажать 'Download the latest release v1.22.0.'
+2.1 После скачивания перемести kubectl.exe в папку c:\Tools\k8s\kubectl\
+2.2 Добавь в переменную окружения (системную) Path новое значение - C:\Tools\k8s\kubectl
+2.3 Открой PowerShell и командой kubectl version --client проверь, что клиент поставлен 
+
+
+3. Надо установить kind:
+	https://kind.sigs.k8s.io/docs/user/quick-start/#installation
+   выбрать ссылку для windows
+3.1 Открой PowerShel, командой cd перейди в c:\Tools\k8s\kind и выполни команду:
+
+	curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.11.1/kind-windows-amd64 Move-Item .\kind-windows-amd64.exe c:\Tools\k8s\kind\kind.exe
+
+(Для Windows она очень странно работает), в папке образуется файл: kind-windows-amd64.exe . Его можно переименовать в kind.exe
+
+
+3.2 Добавь в переменную окружения (системную) Path новое значение - C:\Tools\k8s\kind
+
+3.3 Этот шаг делать в рамках теста, затем кластер удалить - Командой kind create cluster создать новый кластер, после создания вы увидите, что у докера в трее, возле часов, в Kubernates появился новый кластер "kind-kind"
+
+3.4 Не забудьте перезапустить IntelliJ IDEA!!! 
+
+
+
+3. Этот шаг делаем непосредственно после применения файла kind-config -  Надо установить Ingress NGINX:
+	https://kind.sigs.k8s.io/docs/user/ingress/
+   
+выполнить команду прямо в терминале IntelliJ IDEA: 
+	
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+Выполняется моментально, затем командой проверить, что ingress готов обрабатывать запросы (выполнить команду прямо в терминале IntelliJ IDEA):
+
+	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s
+
+
+
+
+
+
+
+
+
